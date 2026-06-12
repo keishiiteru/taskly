@@ -19,6 +19,7 @@ return new class extends Migration
             $table->dateTime('remind_at');               // when to fire the reminder
             $table->boolean('is_sent')->default(false);
             $table->dateTime('sent_at')->nullable();      // set when actually dispatched
+            $table->softDeletes();
             $table->timestamps();
         });
     }
