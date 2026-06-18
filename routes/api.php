@@ -10,7 +10,7 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/test', function () {
     return response()->json(['message' => 'API is working!']);
-});
+})->middleware('auth:sanctum');
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout',[AuthController::class, 'logout'])->middleware('auth:sanctum');
