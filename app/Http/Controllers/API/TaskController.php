@@ -4,9 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\TaskIndexRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
@@ -14,11 +14,34 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(TaskIndexRequest $request)
     {
-        $tasks = Task::all();
+        $validated = $request->validated();
 
-        return $tasks;
+        $query = Task::query();
+
+        // Filtering
+        if (array_key_exists('completed', $validated)) {
+            $query->where('completed', filter_var($validated['completed'], FILTER_VALIDATE_BOOLEAN));
+        }
+
+        if (!empty($validated['search'])) {
+            $query->where(function ($q) use ($validated) {
+                $q->where('title', 'like', '%' . $validated['search'] . '%')
+                ->orWhere('description', 'like', '%' . $validated['search'] . '%');
+            });
+        }
+
+        // Sorting
+        $sortField = $validated['sort_by'] ?? 'created_at';
+        $sortDirection = $validated['sort_dir'] ?? 'desc';
+
+        $query->orderBy($sortField, $sortDirection);
+
+        // Pagination
+        $perPage = $validated['per_page'] ?? 15;
+
+        return $query->paginate($perPage);
     }
 
     /**
