@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\ReminderController;
 use App\Http\Controllers\API\TaskController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -14,4 +15,5 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function (){
     Route::post('logout',[AuthController::class, 'logout']);
     Route::apiResource('tasks', TaskController::class);
+    Route::apiResource('reminders', ReminderController::class);
 });
