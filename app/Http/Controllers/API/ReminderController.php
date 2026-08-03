@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReminderRequest;
+use App\Http\Requests\UpdateReminderRequest;
 use App\Models\Reminder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,9 +46,17 @@ class ReminderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateReminderRequest $request, string $id)
     {
-        //
+        $validated = $request->validated();
+
+        $reminder = Reminder::findOrFail($id);
+
+        $reminder->update($validated);
+
+        return response()->json([
+            'message' => 'Reminder Updated Successfully!'
+        ]);
     }
 
     /**
