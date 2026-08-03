@@ -64,6 +64,12 @@ class ReminderController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $reminder = Reminder::findOrFail($id);
+
+        $reminder->delete();
+
+        return response()->json([
+            'message' => 'Reminder Deleted Successfully!'
+        ]);
     }
 }
