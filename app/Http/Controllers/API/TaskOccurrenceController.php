@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreTaskOccurenceRequest;
+use App\Models\Task;
+use App\Models\TaskOccurrence;
 use Illuminate\Http\Request;
 
 class TaskOccurrenceController extends Controller
@@ -18,9 +21,15 @@ class TaskOccurrenceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTaskOccurenceRequest $request, Task $task)
     {
-        //
+
+        $occurrence = TaskOccurrence::create(
+            $request->validated() + ['task_id' => $task->id]
+        );
+
+        return response()->json($occurrence, 201);
+
     }
 
     /**

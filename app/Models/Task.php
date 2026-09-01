@@ -13,7 +13,7 @@ class Task extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'title', 'description', 'completed'];
+    protected $fillable = ['user_id', 'title', 'description'];
 
     public function user(): BelongsTo
     {
